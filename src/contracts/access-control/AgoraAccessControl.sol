@@ -20,7 +20,7 @@ abstract contract AgoraAccessControl {
     using EnumerableSet for EnumerableSet.AddressSet;
     using EnumerableSet for EnumerableSet.Bytes32Set;
 
-    string public constant ADMIN_ROLE = "ADMIN_ROLE";
+    string public constant ACCESS_CONTROL_ADMIN_ROLE = "ACCESS_CONTROL_ADMIN_ROLE";
 
     /// @notice The AgoraAccessControlStorage struct
     /// @param roleData A mapping of role identifier to AgoraAccessControlRoleData to store role data
@@ -35,9 +35,9 @@ abstract contract AgoraAccessControl {
     //==============================================================================
 
     function _initializeAgoraAccessControl(address _initialAdminAddress) internal {
-        _addRoleToSet({ _role: ADMIN_ROLE });
-        _setRoleMembership({ _role: ADMIN_ROLE, _address: _initialAdminAddress, _insert: true });
-        emit RoleAssigned({ role: ADMIN_ROLE, address_: _initialAdminAddress });
+        _addRoleToSet({ _role: ACCESS_CONTROL_ADMIN_ROLE });
+        _setRoleMembership({ _role: ACCESS_CONTROL_ADMIN_ROLE, _address: _initialAdminAddress, _insert: true });
+        emit RoleAssigned({ role: ACCESS_CONTROL_ADMIN_ROLE, address_: _initialAdminAddress });
     }
 
     // ============================================================================================
@@ -49,7 +49,7 @@ abstract contract AgoraAccessControl {
     /// @param _newAddress The address to be assigned the role
     function assignRole(string memory _role, address _newAddress, bool _addRole) external virtual {
         // Checks: Only Admin can transfer role
-        _requireIsRole({ _role: ADMIN_ROLE, _address: msg.sender });
+        _requireIsRole({ _role: ACCESS_CONTROL_ADMIN_ROLE, _address: msg.sender });
 
         _assignRole({ _role: _role, _newAddress: _newAddress, _addRole: _addRole });
     }
