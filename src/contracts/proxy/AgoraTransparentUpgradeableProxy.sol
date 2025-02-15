@@ -56,4 +56,14 @@ contract AgoraTransparentUpgradeableProxy is ERC1967Proxy {
             super._fallback();
         }
     }
+
+    struct Version {
+        uint256 major;
+        uint256 minor;
+        uint256 patch;
+    }
+
+    function version() public pure returns (Version memory _version) {
+        return Version({ major: 1, minor: 0, patch: 0 });
+    }
 }
