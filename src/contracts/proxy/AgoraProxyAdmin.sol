@@ -37,4 +37,14 @@ contract AgoraProxyAdmin is AgoraAccessControl {
         _requireSenderIsRole({ _role: ACCESS_CONTROL_ADMIN_ROLE });
         _proxy.upgradeToAndCall{ value: msg.value }(_implementation, _calldata);
     }
+
+    struct Version {
+        uint256 major;
+        uint256 minor;
+        uint256 patch;
+    }
+
+    function version() public pure returns (Version memory _version) {
+        return Version({ major: 1, minor: 0, patch: 0 });
+    }
 }
