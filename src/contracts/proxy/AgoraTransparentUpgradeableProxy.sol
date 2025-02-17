@@ -12,7 +12,7 @@ pragma solidity >=0.8.0;
 // ================= AgoraTransparentUpgradeableProxy =================
 // ====================================================================
 
-import { ERC1967Proxy } from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import { Proxy } from "@openzeppelin/contracts/proxy/Proxy.sol";
 import { ERC1967Utils } from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Utils.sol";
 import { ITransparentUpgradeableProxy } from "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 
@@ -22,7 +22,7 @@ struct ConstructorParams {
     bytes data;
 }
 
-contract AgoraTransparentUpgradeableProxy is ERC1967Proxy {
+contract AgoraTransparentUpgradeableProxy is Proxy {
     address private immutable _admin;
 
     /**
@@ -35,10 +35,13 @@ contract AgoraTransparentUpgradeableProxy is ERC1967Proxy {
      * backed by the implementation at `_logic`, and optionally initialized with `_data` as explained in
      * {ERC1967Proxy-constructor}.
      */
-    constructor(ConstructorParams memory _params) payable ERC1967Proxy(_params.logic, _params.data) {
+    constructor(ConstructorParams memory _params) payable {
         _admin = _params.proxyAdminAddress;
         // Set the storage value and emit an event for ERC-1967 compatibility
         ERC1967Utils.changeAdmin(_admin);
+        if (_params.logic != address(0)) {
+            ERC1967Utils.upgradeToAndCall(_params.logic, _params.data);
+        }
     }
 
     /**
@@ -55,6 +58,10 @@ contract AgoraTransparentUpgradeableProxy is ERC1967Proxy {
         } else {
             super._fallback();
         }
+    }
+
+    function _implementation() internal view virtual override returns (address) {
+        return ERC1967Utils.getImplementation();
     }
 
     struct Version {
