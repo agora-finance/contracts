@@ -12,8 +12,8 @@ pragma solidity >=0.8.0;
 // ======================== AgoraProxyAdmin ===========================
 // ====================================================================
 
-import { ITransparentUpgradeableProxy } from "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 import { AgoraAccessControl } from "../access-control/AgoraAccessControl.sol";
+import { ITransparentUpgradeableProxy } from "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 /// @title AgoraProxyAdmin
 /// @notice A proxy admin contract that allows for multiple admins to be set for better business continuity
 /// @author Agora
@@ -34,7 +34,7 @@ contract AgoraProxyAdmin is AgoraAccessControl {
         address _implementation,
         bytes memory _calldata
     ) public payable virtual {
-        _requireSenderIsRole({ _role: ACCESS_CONTROL_ADMIN_ROLE });
+        _requireSenderIsRole({ _role: ACCESS_CONTROL_MANAGER_ROLE });
         _proxy.upgradeToAndCall{ value: msg.value }(_implementation, _calldata);
     }
 

@@ -9,11 +9,9 @@ contract AgoraAccessControlWithExecutor is AgoraAccessControl {
     }
 
     function execute(address _target, bytes memory _data) external payable {
-        _requireSenderIsRole({ _role: ACCESS_CONTROL_ADMIN_ROLE });
+        _requireSenderIsRole({ _role: ACCESS_CONTROL_MANAGER_ROLE });
         (bool success, ) = _target.call{ value: msg.value }(_data);
-        if (!success) {
-            revert ExecuteCallFailed();
-        }
+        if (!success) revert ExecuteCallFailed();
     }
 
     error ExecuteCallFailed();
