@@ -23,7 +23,7 @@ struct ConstructorParams {
 }
 
 contract AgoraTransparentUpgradeableProxy is Proxy {
-    address private immutable _admin;
+    address private _admin;
 
     /**
      * @dev The proxy caller is the current admin, and can't fallback to the proxy target.
@@ -62,15 +62,5 @@ contract AgoraTransparentUpgradeableProxy is Proxy {
 
     function _implementation() internal view virtual override returns (address) {
         return ERC1967Utils.getImplementation();
-    }
-
-    struct Version {
-        uint256 major;
-        uint256 minor;
-        uint256 patch;
-    }
-
-    function version() public pure returns (Version memory _version) {
-        return Version({ major: 1, minor: 0, patch: 0 });
     }
 }
