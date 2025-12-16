@@ -23,7 +23,7 @@ struct ConstructorParams {
 }
 
 contract AgoraTransparentUpgradeableProxy is Proxy {
-    address private _admin;
+    address private immutable _admin;
 
     /**
      * @dev The proxy caller is the current admin, and can't fallback to the proxy target.
